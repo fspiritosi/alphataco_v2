@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Río Negro",
+    "id": "07106120-ef28-4f16-a767-cd94478d5c87"
+  },
+  {
+    "name": "Tucumán",
+    "id": "079904b9-2b4c-4083-99f9-a3734df63455"
+  },
+  {
+    "name": "Córdoba",
+    "id": "08f5ab28-ce45-48ff-845b-33b0c3cd9176"
+  },
+  {
+    "name": "Tierra del Fuego",
+    "id": "1a1b941a-e9d7-4027-8133-c20f1742e647"
+  },
+  {
+    "name": "Salta",
+    "id": "2792c777-2b2f-41de-95b0-14810915bafb"
+  },
+  {
+    "name": "Chubut",
+    "id": "29b27d1c-f31a-4065-9bca-32540be8deb9"
+  },
+  {
+    "name": "La Rioja",
+    "id": "34c060a9-e554-4374-996e-0443ae56b5ba"
+  },
+  {
+    "name": "Entre Ríos",
+    "id": "4f5ec84b-06fb-4be0-91ca-d591e863337a"
+  },
+  {
+    "name": "Misiones",
+    "id": "5b557422-6f48-40d1-91cb-47430db7792f"
+  },
+  {
+    "name": "Chaco",
+    "id": "68241c16-fbab-435c-9a2f-a9454f12925e"
+  },
+  {
+    "name": "La Pampa",
+    "id": "7817a077-56f8-4ef5-a22a-73fbf37971ec"
+  },
+  {
+    "name": "Neuquén",
+    "id": "81dcbd18-f387-4e3b-b908-0fcd0b15a7fb"
+  },
+  {
+    "name": "Formosa",
+    "id": "95efa35c-dee3-4e52-b0fc-d181805a4de1"
+  },
+  {
+    "name": "Mendoza",
+    "id": "9744d15a-abd9-440d-b806-faa3c56be154"
+  },
+  {
+    "name": "Buenos Aires",
+    "id": "a53c1415-0ff2-4048-ac06-ab2df15a7c43"
+  },
+  {
+    "name": "San Juan",
+    "id": "ad142401-4020-4869-873a-7e19ffbd9128"
+  },
+  {
+    "name": "San Luis",
+    "id": "b5e24169-4132-477d-9a60-07c21a2cecb7"
+  },
+  {
+    "name": "Jujuy",
+    "id": "b7de3b3f-5278-4ef5-b7cc-60ab7c26cfaa"
+  },
+  {
+    "name": "Buenos Aires-GBA",
+    "id": "ba643d71-a17f-4694-93a7-9b5e797b11e6"
+  },
+  {
+    "name": "Capital Federal",
+    "id": "bd31ef2a-3aec-4db0-a3a5-eefaf95284a4"
+  },
+  {
+    "name": "Santa Fe",
+    "id": "bde15087-19e4-47a1-94af-6c8447ff727c"
+  },
+  {
+    "name": "Catamarca",
+    "id": "d1855f55-c917-4fef-941f-6b4507e578cb"
+  },
+  {
+    "name": "Corrientes",
+    "id": "de183c57-f92f-408e-8eea-e8ed0c001752"
+  },
+  {
+    "name": "Santiago del Estero",
+    "id": "f07dd65f-1731-4ac9-a9e0-8ef34fb54c8f"
+  },
+  {
+    "name": "Santa Cruz",
+    "id": "f51b5108-501f-4cc4-a0a1-16963d3615cb"
+  }
+]

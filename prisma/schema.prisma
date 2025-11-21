@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id // clerk user id
+  email     String   @unique
+  name      String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownedCompanies Company[]       @relation("CompanyOwner")
+  memberships    CompanyMember[]
+  current_company_id String?
+}
+
+enum CompanyRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+model Company {
+  id          String        @id @default(uuid())
+  name        String
+  description String
+  website     String?
+  email       String?
+  phone       String?
+  address     String?
+  country     String?
+  logo        String?
+  is_active   Boolean       @default(true)
+  cuit        String
+  owner_id    String // relacion un owner muchas companys
+  owner       User          @relation("CompanyOwner", fields: [owner_id], references: [id])
+  province_id String
+  city_id     String
+  province    Province      @relation(fields: [province_id], references: [id])
+  city        City          @relation(fields: [city_id], references: [id])
+  members     CompanyMember[]
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @default(now())
+}
+
+model Province {
+  id String @id @default(uuid())
+  name String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  cities City[]
+  companies Company[]
+}
+
+model City {
+  id String @id @default(uuid())
+  name String
+  province_id String 
+  province Province @relation(fields: [province_id], references: [id])
+  companies Company[]
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+ 
+model CompanyMember {
+  id         String      @id @default(uuid())
+  userId     String
+  companyId  String
+  role       CompanyRole @default(MEMBER)
+
+  user       User        @relation(fields: [userId], references: [id])
+  company    Company     @relation(fields: [companyId], references: [id])
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@unique([userId, companyId])
+}
+
