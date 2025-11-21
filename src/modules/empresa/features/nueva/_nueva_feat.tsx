@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Building2, Upload, X } from "lucide-react"
 import HeaderModule from "@/shared/components/header-module"
 import { companyFormSchema, type CompanyFormData, defaultCompanyFormValues } from "./schemas/companySchema"
-import { createCompanyAction, getProvincesAction } from "../../actions/nueva_actions"
+import { createCompanyAction, getProvincesAction, updateCompanyAction } from "../../actions/nueva_actions"
 import { useCloudfareImage } from "./hooks/useCloudfareImage"
 import { LocationSelect } from "./components/LocationSelect"
 
@@ -41,12 +41,23 @@ const countries = [
     "Venezuela",
 ]
 
-function NuevaFeat() {
+type NuevaFeatProps = {
+    mode?: "create" | "edit";
+    initialValues?: Partial<CompanyFormData>;
+    initialLogoUrl?: string | null;
+    companyId?: string;
+};
+
+function NuevaFeat({ mode = "create", initialValues, initialLogoUrl, companyId }: NuevaFeatProps) {
     const router = useRouter()
+
+    const isEditMode = mode === "edit";
 
     const form = useForm<CompanyFormData>({
         resolver: zodResolver(companyFormSchema),
-        defaultValues: defaultCompanyFormValues,
+        defaultValues: initialValues
+            ? { ...defaultCompanyFormValues, ...initialValues }
+            : defaultCompanyFormValues,
     })
 
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -71,7 +82,7 @@ function NuevaFeat() {
         handleImageSelect,
         handleImageRemove,
         uploadImage
-    } = useCloudfareImage()
+    } = useCloudfareImage({ existingImageUrl: initialLogoUrl ?? null })
 
     const onSubmit = async (data: CompanyFormData) => {
         try {
@@ -91,11 +102,17 @@ function NuevaFeat() {
                 }
             }
 
-            // Crear la empresa con la URL del logo
-            const result = await createCompanyAction(data, logoUrl)
+            // Crear o actualizar la empresa con la URL del logo
+            let result;
+
+            if (isEditMode && companyId) {
+                result = await updateCompanyAction(companyId, data, logoUrl ?? initialLogoUrl ?? undefined)
+            } else {
+                result = await createCompanyAction(data, logoUrl)
+            }
 
             if (result.success) {
-                alert("Empresa creada exitosamente")
+                alert(isEditMode ? "Empresa actualizada exitosamente" : "Empresa creada exitosamente")
                 router.push("/dashboard")
             } else {
                 alert(`Error: ${result.error}`)
@@ -116,7 +133,11 @@ function NuevaFeat() {
                         <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                             <Building2 className="h-6 w-6 text-primary" />
                         </div>
-                        <HeaderModule title="Nueva Empresa" description="Completa los datos para registrar una nueva empresa" />
+                        {mode === "edit" ? (
+                            <HeaderModule title="Editar Empresa" description="Completa los datos para editar una empresa" />
+                        ) : (
+                            <HeaderModule title="Nueva Empresa" description="Completa los datos para registrar una nueva empresa" />
+                        )}
                     </div>
                 </div>
 
@@ -387,7 +408,9 @@ function NuevaFeat() {
                                 </Button>
                             </Link>
                             <Button type="submit" disabled={isSubmitting}>
-                                {isSubmitting ? "Creando..." : "Crear Empresa"}
+                                {isEditMode
+                                    ? isSubmitting ? "Guardando..." : "Guardar Cambios"
+                                    : isSubmitting ? "Creando..." : "Crear Empresa"}
                             </Button>
                         </div>
                     </form>

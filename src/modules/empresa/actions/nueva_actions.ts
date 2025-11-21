@@ -135,3 +135,70 @@ export async function uploadCompanyLogoAction(formData: FormData) {
     return { success: false, error: "Error al subir la imagen" };
   }
 }
+
+export async function getCompanyByIdAction(id: string ) {
+  const user = await ensureUserFromClerk();
+ 
+  if (!id) {
+    return null;
+  }
+
+  const company = await prisma.company.findUnique({
+    where: {
+      id,
+      owner_id: user.id,
+    },
+  });
+
+  return company;
+}
+
+export async function updateCompanyAction(
+  id: string,
+  formData: CompanyFormData,
+  logoUrl?: string
+) {
+  const user = await ensureUserFromClerk();
+
+  try {
+    const existing = await prisma.company.findUnique({ where: { id } });
+
+    if (!existing || existing.owner_id !== user.id) {
+      return { success: false, error: "No está autorizado para editar esta empresa" };
+    }
+
+    const validatedData = companyFormSchema.parse(formData);
+    const { logo: _, ...dataWithoutLogo } = validatedData;
+
+    const companyData = {
+      name: dataWithoutLogo.name,
+      description: dataWithoutLogo.description,
+      website: dataWithoutLogo.website,
+      email: dataWithoutLogo.email,
+      phone: dataWithoutLogo.phone,
+      address: dataWithoutLogo.address,
+      country: dataWithoutLogo.country,
+      cuit: dataWithoutLogo.cuit,
+      province_id: dataWithoutLogo.province_id,
+      city_id: dataWithoutLogo.city_id,
+      logo: logoUrl ?? existing.logo,
+    };
+
+    const company = await prisma.company.update({
+      where: { id },
+      data: companyData,
+    });
+
+    revalidatePath("/dashboard");
+
+    return { success: true, data: company };
+  } catch (error) {
+    console.error("Error en updateCompanyAction:", error);
+
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: false, error: "Error desconocido al actualizar la empresa" };
+  }
+}

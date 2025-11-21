@@ -81,7 +81,7 @@ export const GridCards = async () => {
 
               </div>
             </div>
-            <Link href={`/companies/${company?.id}/edit`}>
+            <Link href={`/dashboard/empresa/editar/${company?.id}`}>
               <Button className="gap-2">
                 <Edit className="h-4 w-4" />
                 Editar
